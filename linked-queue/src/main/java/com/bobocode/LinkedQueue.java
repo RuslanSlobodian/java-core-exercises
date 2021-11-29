@@ -9,13 +9,36 @@ package com.bobocode;
  */
 public class LinkedQueue<T> implements Queue<T> {
 
+    final static class Node<T>{
+        T element;
+        Node<T> next;
+
+        private Node(T element) {
+            this.element = element;
+            next = null;
+        }
+    }
+
+    private Node<T> head;
+    private Node<T> tail;
+    private int size;
+
+    public LinkedQueue() {
+        head = tail = null;
+        size = 0;
+    }
+
     /**
      * Adds an element to the end of the queue.
      *
      * @param element the element to add
      */
     public void add(T element) {
-        throw new UnsupportedOperationException("This method is not implemented yet"); // todo: implement this method
+        if (head == null)
+            head = tail = new Node<>(element);
+        else
+            tail = tail.next = new Node<>(element);
+        size++;
     }
 
     /**
@@ -24,7 +47,16 @@ public class LinkedQueue<T> implements Queue<T> {
      * @return an element that was retrieved from the head or null if queue is empty
      */
     public T poll() {
-        throw new UnsupportedOperationException("This method is not implemented yet"); // todo: implement this method
+        if (head == null) {
+            return null;
+        }
+        T element = head.element;
+        size--;
+        if (head == tail)
+            head = tail = null;
+        else
+            head = head.next;
+        return element;
     }
 
     /**
@@ -33,7 +65,7 @@ public class LinkedQueue<T> implements Queue<T> {
      * @return an integer value that is a size of queue
      */
     public int size() {
-        throw new UnsupportedOperationException("This method is not implemented yet"); // todo: implement this method
+        return size;
     }
 
     /**
@@ -42,6 +74,6 @@ public class LinkedQueue<T> implements Queue<T> {
      * @return {@code true} if the queue is empty, returns {@code false} if it's not
      */
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("This method is not implemented yet"); // todo: implement this method
+        return (size == 0);
     }
 }
