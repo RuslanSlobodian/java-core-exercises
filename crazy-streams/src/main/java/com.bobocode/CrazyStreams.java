@@ -12,6 +12,7 @@ import java.util.function.Function;
 import java.util.function.ToIntFunction;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.*;
 
@@ -191,13 +192,11 @@ public class CrazyStreams {
      * @return a map where key is a letter and value is its count in all first names
      */
     public Map<Character, Long> getCharacterFrequencyInFirstNames() {
-        throw new UnsupportedOperationException("It's your job to implement this method"); // todo
-//        return accounts.stream()
-//                .map(account -> account.getFirstName())
-//                .map(String::chars)
-//                .mapToInt(value -> value)
-//                .IntStream.mapToObj(a -> (char) a)
-//                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        return accounts.stream()
+                .map(account -> account.getFirstName())
+                .flatMapToInt(String::chars)
+                .mapToObj(c ->(char) c)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
 
     /**
@@ -207,7 +206,12 @@ public class CrazyStreams {
      * @return a map where key is a letter and value is its count ignoring case in all first and last names
      */
     public Map<Character, Long> getCharacterFrequencyIgnoreCaseInFirstAndLastNames() {
-        throw new UnsupportedOperationException("It's your job to implement this method"); // todo
+        return accounts.stream()
+                .flatMap(account -> Stream.of(account.getFirstName(),account.getLastName()))
+                .map(String::toLowerCase)
+                .flatMapToInt(String::chars)
+                .mapToObj(c -> (char)c)
+                .collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
     }
 
 }
